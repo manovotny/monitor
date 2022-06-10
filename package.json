@@ -1,20 +1,41 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
-    "type-check": "tsc"
-  },
-  "dependencies": {
-    "next": "latest",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "devDependencies": {
-    "@types/node": "^12.12.21",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "typescript": "4.0"
-  }
+    "name": "monitor",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "build": "next build",
+        "check": "npm-check -u",
+        "dev": "next",
+        "start": "next start",
+        "lint": "eslint . --ext .js,.json,.ts,.tsx",
+        "lint-staged": "lint-staged",
+        "prettier": "prettier --write --ignore-unknown .",
+        "prettier:check": "prettier --check --ignore-unknown .",
+        "test": "npm run lint && npm run type-check && npm run prettier:check",
+        "type-check": "tsc"
+    },
+    "git": {
+        "pre-commit": "lint-staged"
+    },
+    "lint-staged": {
+        "*": "prettier --write --ignore-unknown"
+    },
+    "dependencies": {
+        "next": "12.1.6",
+        "react": "18.1.0",
+        "react-dom": "18.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "17.0.41",
+        "@types/react": "18.0.12",
+        "@types/react-dom": "18.0.5",
+        "@vercel/git-hooks": "1.0.0",
+        "eslint": "8.13.0",
+        "eslint-config-get-off-my-lawn": "7.1.0",
+        "lint-staged": "13.0.1",
+        "npm-check": "5.9.2",
+        "prettier": "2.6.2",
+        "prettier-config-get-off-my-lawn": "1.0.0",
+        "typescript": "4.7.3"
+    }
 }
