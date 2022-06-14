@@ -11,15 +11,19 @@ type Artist = {
     artistType: string;
 };
 
+type Artists = {
+    results: Artist[];
+};
+
 const fetcher = async (url: string, init?: RequestInit): Promise<JSON> => {
     const response = await fetch(url, init);
 
-    return response.json();
+    return response.json() as Promise<JSON>;
 };
 const Search = (): ReactElement => {
     const [inputText, setText] = useState('');
     const [term] = useDebounce(inputText, 500);
-    const [results, setResults] = useState<Artist[]>([]);
+    const [artists, setArtists] = useState<Artist[]>([]);
     const {data}: SWRResponse = useSWR(
         () =>
             term.length
@@ -36,28 +40,29 @@ const Search = (): ReactElement => {
                 : undefined,
         fetcher
     );
+    const {results} = data as Artists;
 
     useEffect(() => {
-        if (data?.results.length) {
-            setResults(data.results.filter(({artistType}: Artist) => artistType.toLowerCase() === 'artist'));
+        if (results.length) {
+            setArtists(results.filter(({artistType}: Artist) => artistType.toLowerCase() === 'artist'));
         }
-    }, [data]);
+    }, [results]);
 
     return (
         <>
             <input
-                onChange={(e): void => {
-                    setText(e.target.value);
-                    setResults([]);
+                onChange={(event): void => {
+                    setText(event.target.value);
+                    setArtists([]);
                 }}
                 value={inputText}
             />
             <p>{`Actual value: ${inputText}`}</p>
             <p>{`Debounce value: ${term}`}</p>
-            <p>{`Results: ${results.length}`}</p>
-            {results.length && (
+            <p>{`Results: ${artists.length}`}</p>
+            {artists.length && (
                 <ul>
-                    {results.map(({artistId, artistName}) => (
+                    {artists.map(({artistId, artistName}) => (
                         <li key={artistId}>{artistName}</li>
                     ))}
                 </ul>
