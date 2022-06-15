@@ -1,0 +1,42 @@
+[
+    {
+        "_id": "211ad2ef-1802-4564-bea7-ad22fa82d1c3",
+        "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+        "containerId": "",
+        "name": "/search",
+        "url": "https://itunes.apple.com/search?media=music&entity=musicArtist&attribute=artistTerm&limit=25&term=jack",
+        "method": "GET",
+        "sortNum": 10000,
+        "created": "2022-06-09T18:19:04.872Z",
+        "modified": "2022-06-15T19:47:16.757Z",
+        "headers": [],
+        "params": [
+            {
+                "name": "media",
+                "value": "music",
+                "isPath": false
+            },
+            {
+                "name": "entity",
+                "value": "musicArtist",
+                "isPath": false
+            },
+            {
+                "name": "attribute",
+                "value": "artistTerm",
+                "isPath": false
+            },
+            {
+                "name": "limit",
+                "value": "25",
+                "isPath": false
+            },
+            {
+                "name": "term",
+                "value": "jack",
+                "isPath": false
+            }
+        ],
+        "tests": []
+    }
+]
