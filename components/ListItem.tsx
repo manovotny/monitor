@@ -1,7 +1,7 @@
 import type {ReactElement} from 'react';
 import Link from 'next/link';
 
-import type {User} from '../interfaces';
+import type {User} from '../types';
 
 type Props = {
     data: User;

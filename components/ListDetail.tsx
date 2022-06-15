@@ -1,6 +1,6 @@
 import type {ReactElement} from 'react';
 
-import type {User} from '../interfaces';
+import type {User} from '../types';
 
 type ListDetailProps = {
     item: User;

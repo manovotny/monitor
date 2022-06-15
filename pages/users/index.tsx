@@ -2,7 +2,7 @@ import type {GetStaticProps} from 'next';
 import Link from 'next/link';
 import type {ReactElement} from 'react';
 
-import type {User} from '../../interfaces';
+import type {User} from '../../types';
 import {sampleUserData} from '../../utils/sample-data';
 import Layout from '../../components/Layout';
 import List from '../../components/List';
