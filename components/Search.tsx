@@ -40,13 +40,14 @@ const Search = (): ReactElement => {
                 : undefined,
         fetcher
     );
-    const {results} = data as Artists;
 
     useEffect(() => {
+        const results = data ? (data as Artists).results : [];
+
         if (results.length) {
             setArtists(results.filter(({artistType}: Artist) => artistType.toLowerCase() === 'artist'));
         }
-    }, [results]);
+    }, [data]);
 
     return (
         <>
