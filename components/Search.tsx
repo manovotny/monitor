@@ -5,6 +5,8 @@ import type {SWRResponse} from 'swr';
 import type {ReactElement} from 'react';
 import useSWR from 'swr';
 
+import fetcher from '../lib/fetcher';
+
 type Artist = {
     artistId: number;
     artistName: string;
@@ -15,11 +17,6 @@ type Artists = {
     results: Artist[];
 };
 
-const fetcher = async (url: string, init?: RequestInit): Promise<JSON> => {
-    const response = await fetch(url, init);
-
-    return response.json() as Promise<JSON>;
-};
 const Search = (): ReactElement => {
     const [inputText, setText] = useState('');
     const [term] = useDebounce(inputText, 500);
