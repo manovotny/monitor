@@ -1,4 +1,4 @@
 module.exports = {
     extends: 'get-off-my-lawn',
-    ignorePatterns: ['dist', 'main', 'renderer/.next', 'renderer/out'],
+    ignorePatterns: ['.next', 'thunder-tests'],
 };
