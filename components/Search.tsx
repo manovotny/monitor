@@ -1,48 +1,23 @@
 import {useEffect, useState} from 'react';
 import {useDebounce} from 'use-debounce';
-import {stringifyUrl} from 'query-string';
 import type {SWRResponse} from 'swr';
 import type {ReactElement} from 'react';
 import useSWR from 'swr';
 
+import type {Artist, Artists} from '../types';
 import fetcher from '../lib/fetcher';
-
-type Artist = {
-    artistId: number;
-    artistName: string;
-    artistType: string;
-};
-
-type Artists = {
-    results: Artist[];
-};
 
 const Search = (): ReactElement => {
     const [inputText, setText] = useState('');
     const [term] = useDebounce(inputText, 500);
     const [artists, setArtists] = useState<Artist[]>([]);
-    const {data}: SWRResponse = useSWR(
-        () =>
-            term.length
-                ? stringifyUrl({
-                      query: {
-                          attribute: 'artistTerm',
-                          entity: 'musicArtist',
-                          limit: 25,
-                          media: 'music',
-                          term,
-                      },
-                      url: 'https://itunes.apple.com/search',
-                  })
-                : undefined,
-        fetcher
-    );
+    const {data}: SWRResponse = useSWR(() => (term.length ? `/api/search?term=${term}` : undefined), fetcher);
 
     useEffect(() => {
-        const results = data ? (data as Artists).results : [];
+        const results = data ? (data as Artists).artists : [];
 
         if (results.length) {
-            setArtists(results.filter(({artistType}: Artist) => artistType.toLowerCase() === 'artist'));
+            setArtists(results);
         }
     }, [data]);
 
@@ -57,8 +32,8 @@ const Search = (): ReactElement => {
             />
             <p>{`Actual value: ${inputText}`}</p>
             <p>{`Debounce value: ${term}`}</p>
-            <p>{`Results: ${artists.length}`}</p>
-            {artists.length && (
+            <p>{`Count: ${artists.length}`}</p>
+            {artists.length > 0 && (
                 <ul>
                     {artists.map(({artistId, artistName}) => (
                         <li key={artistId}>{artistName}</li>
