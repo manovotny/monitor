@@ -1,42 +1,135 @@
 [
-    {
-        "_id": "211ad2ef-1802-4564-bea7-ad22fa82d1c3",
-        "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
-        "containerId": "",
-        "name": "/search",
-        "url": "https://itunes.apple.com/search?media=music&entity=musicArtist&attribute=artistTerm&limit=25&term=jack",
-        "method": "GET",
-        "sortNum": 10000,
-        "created": "2022-06-09T18:19:04.872Z",
-        "modified": "2022-06-15T19:47:16.757Z",
-        "headers": [],
-        "params": [
-            {
-                "name": "media",
-                "value": "music",
-                "isPath": false
-            },
-            {
-                "name": "entity",
-                "value": "musicArtist",
-                "isPath": false
-            },
-            {
-                "name": "attribute",
-                "value": "artistTerm",
-                "isPath": false
-            },
-            {
-                "name": "limit",
-                "value": "25",
-                "isPath": false
-            },
-            {
-                "name": "term",
-                "value": "jack",
-                "isPath": false
-            }
-        ],
-        "tests": []
-    }
+  {
+    "_id": "211ad2ef-1802-4564-bea7-ad22fa82d1c3",
+    "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+    "containerId": "",
+    "name": "/search (movie)",
+    "url": "https://itunes.apple.com/search?media=movie&entity=movie&attribute=movieTerm&limit=25&term=twilight",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-06-09T18:19:04.872Z",
+    "modified": "2022-06-17T18:27:20.797Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "media",
+        "value": "movie",
+        "isPath": false
+      },
+      {
+        "name": "entity",
+        "value": "movie",
+        "isPath": false
+      },
+      {
+        "name": "attribute",
+        "value": "movieTerm",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "25",
+        "isPath": false
+      },
+      {
+        "name": "term",
+        "value": "twilight",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "bbbea70e-56e3-44b9-90ec-341c9fbe9e69",
+    "colId": "afb5429f-ba36-490c-a20a-f4db45dd97a0",
+    "containerId": "",
+    "name": "/api/artists/{id}",
+    "url": "http://localhost:3000/api/artists/954266",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-06-15T21:18:50.691Z",
+    "modified": "2022-06-16T15:00:55.702Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "d7ab9504-899a-43a0-b554-881108a30bdd",
+    "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+    "containerId": "",
+    "name": "/lookup",
+    "url": "https://itunes.apple.com/lookup?id=472949623&entity=album",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-06-16T04:11:18.177Z",
+    "modified": "2022-07-08T21:20:23.047Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "id",
+        "value": "472949623",
+        "isPath": false
+      },
+      {
+        "name": "entity",
+        "value": "album",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "4cfea04c-5a7c-4570-9f2d-0620dec6f076",
+    "colId": "afb5429f-ba36-490c-a20a-f4db45dd97a0",
+    "containerId": "",
+    "name": "/api/artists/{id}/artwork",
+    "url": "http://localhost:3000/api/artists/1264549322/artwork",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-06-16T19:39:27.219Z",
+    "modified": "2022-06-16T19:40:20.458Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "efd5c043-cdb9-464c-84ce-ecd512907cc2",
+    "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+    "containerId": "",
+    "name": "/search (music)",
+    "url": "https://itunes.apple.com/search?media=music&entity=musicArtist&attribute=artistTerm&limit=25&term=jack",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2022-06-17T18:08:06.476Z",
+    "modified": "2022-06-17T18:08:06.476Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "media",
+        "value": "music",
+        "isPath": false
+      },
+      {
+        "name": "entity",
+        "value": "musicArtist",
+        "isPath": false
+      },
+      {
+        "name": "attribute",
+        "value": "artistTerm",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "25",
+        "isPath": false
+      },
+      {
+        "name": "term",
+        "value": "jack",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  }
 ]
