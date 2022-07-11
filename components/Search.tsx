@@ -16,7 +16,7 @@ const Search = (): ReactElement => {
     const [inputText, setText] = useState('');
     const [term] = useDebounce(inputText, 500);
     const [artists, setArtists] = useState<Artist[]>([]);
-    const {data}: SWRResponse = useSWR(() => (term.length ? `/api/search?term=${term}` : undefined), fetcher);
+    const {data}: SWRResponse = useSWR(() => (term.length ? `/api/artists?term=${term}` : undefined), fetcher);
 
     useEffect(() => {
         setArtists((data as ApiResults | undefined)?.artists ?? []);

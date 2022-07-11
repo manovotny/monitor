@@ -13,7 +13,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse): Prom
 
     if (!term.length) {
         response.status(400);
-        response.json({error: 'No search `term` provided.'});
+        response.json({error: 'No `term` provided.'});
 
         return response;
     }
