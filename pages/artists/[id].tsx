@@ -3,6 +3,7 @@ import type {ReactElement} from 'react';
 import type {SWRResponse} from 'swr';
 import useSWR from 'swr';
 import Image from 'next/image';
+import {useRouter} from 'next/router';
 
 import Layout from '../../components/Layout';
 import fetcher from '../../lib/fetcher';
@@ -13,6 +14,7 @@ type Props = {
 };
 
 const ArtistPage = ({id}: Props): ReactElement => {
+    const router = useRouter();
     const {data}: SWRResponse = useSWR(() => (id.length ? `/api/artists/${id}` : undefined), fetcher);
 
     if (!data) return <p>{'Loading...'}</p>;
@@ -21,6 +23,9 @@ const ArtistPage = ({id}: Props): ReactElement => {
 
     return (
         <Layout title={artist.name}>
+            <button onClick={router.back} type="button">
+                {'⬅️ Back to search results'}
+            </button>
             <p>{'Artist page'}</p>
             <ul>
                 <li>{`Id: ${artist.id}`}</li>

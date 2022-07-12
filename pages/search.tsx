@@ -4,6 +4,8 @@ import {useDebounce} from 'use-debounce';
 import type {SWRResponse} from 'swr';
 import useSWR from 'swr';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
+import type {GetServerSideProps} from 'next';
 
 import Layout from '../components/Layout';
 import type {Artist} from '../types';
@@ -13,8 +15,13 @@ type ApiResults = {
     artists?: Artist[];
 };
 
-const SearchPage = (): ReactElement => {
-    const [inputText, setText] = useState('');
+type Props = {
+    defaultTerm: string;
+};
+
+const SearchPage = ({defaultTerm}: Props): ReactElement => {
+    const router = useRouter();
+    const [inputText, setText] = useState(defaultTerm);
     const [term] = useDebounce(inputText, 500);
     const [artists, setArtists] = useState<Artist[]>([]);
     const {data}: SWRResponse = useSWR(() => (term.length ? `/api/artists?term=${term}` : undefined), fetcher);
@@ -22,6 +29,19 @@ const SearchPage = (): ReactElement => {
     useEffect(() => {
         setArtists((data as ApiResults | undefined)?.artists ?? []);
     }, [data]);
+
+    useEffect(() => {
+        if (term.length) {
+            router.push(
+                {
+                    pathname: '/search',
+                    query: {term},
+                },
+                undefined,
+                {shallow: true}
+            );
+        }
+    }, [term]);
 
     return (
         <Layout title="Search">
@@ -51,3 +71,10 @@ const SearchPage = (): ReactElement => {
 };
 
 export default SearchPage;
+
+// eslint-disable-next-line  @typescript-eslint/require-await
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+    props: {
+        defaultTerm: context.query.term ?? '',
+    },
+});
