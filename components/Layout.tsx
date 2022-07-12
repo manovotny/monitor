@@ -8,7 +8,7 @@ type Props = {
     title?: string;
 };
 
-const Layout = ({children, title = 'This is the default title'}: Props): ReactElement => (
+const Layout = ({children, title = 'Home'}: Props): ReactElement => (
     <>
         <Head>
             <title>{title}</title>
@@ -19,25 +19,18 @@ const Layout = ({children, title = 'This is the default title'}: Props): ReactEl
             <nav>
                 <Link href="/">
                     <a>{'Home'}</a>
-                </Link>{' '}
-                {'|'}{' '}
-                <Link href="/about">
-                    <a>{'About'}</a>
-                </Link>{' '}
-                {'|'}{' '}
-                <Link href="/users">
-                    <a>{'Users List'}</a>
-                </Link>{' '}
-                {'| '}{' '}
-                <Link href="/api/users">
-                    <a>{'Users API'}</a>
+                </Link>
+                {' | '}
+                <Link href="/search">
+                    <a>{'Search'}</a>
                 </Link>
             </nav>
+            <hr />
         </header>
         {children}
         <footer>
             <hr />
-            <span>{"I'm here to stay (Footer)"}</span>
+            <p>{'Footer'}</p>
         </footer>
     </>
 );

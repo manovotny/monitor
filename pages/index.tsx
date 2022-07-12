@@ -1,12 +1,7 @@
 import type {ReactElement} from 'react';
 
 import Layout from '../components/Layout';
-import Search from '../components/Search';
 
-const IndexPage = (): ReactElement => (
-    <Layout>
-        <Search />
-    </Layout>
-);
+const IndexPage = (): ReactElement => <Layout>{'Home'}</Layout>;
 
 export default IndexPage;
