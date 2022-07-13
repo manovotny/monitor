@@ -21,8 +21,8 @@ const Layout = ({children, title = 'Home'}: Props): ReactElement => (
                     <a>{'Home'}</a>
                 </Link>
                 {' | '}
-                <Link href="/search">
-                    <a>{'Search'}</a>
+                <Link href="/music">
+                    <a>{'Music'}</a>
                 </Link>
             </nav>
             <hr />

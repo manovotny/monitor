@@ -19,7 +19,7 @@ type Props = {
     defaultTerm: string;
 };
 
-const SearchPage = ({defaultTerm}: Props): ReactElement => {
+const MusicPage = ({defaultTerm}: Props): ReactElement => {
     const router = useRouter();
     const [inputText, setText] = useState(defaultTerm);
     const [term] = useDebounce(inputText, 500);
@@ -34,7 +34,7 @@ const SearchPage = ({defaultTerm}: Props): ReactElement => {
         if (term.length) {
             router.push(
                 {
-                    pathname: '/search',
+                    pathname: '/music',
                     query: {term},
                 },
                 undefined,
@@ -44,7 +44,7 @@ const SearchPage = ({defaultTerm}: Props): ReactElement => {
     }, [term]);
 
     return (
-        <Layout title="Search">
+        <Layout title="Music">
             <input
                 onChange={(event): void => {
                     setText(event.target.value);
@@ -70,7 +70,7 @@ const SearchPage = ({defaultTerm}: Props): ReactElement => {
     );
 };
 
-export default SearchPage;
+export default MusicPage;
 
 // eslint-disable-next-line  @typescript-eslint/require-await
 export const getServerSideProps: GetServerSideProps = async (context) => ({
