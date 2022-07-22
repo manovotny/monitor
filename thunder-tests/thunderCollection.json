@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+    "colName": "iTunes Search API",
+    "created": "2022-06-09T18:19:00.188Z",
+    "sortNum": 10000,
+    "folders": []
+  },
+  {
+    "_id": "afb5429f-ba36-490c-a20a-f4db45dd97a0",
+    "colName": "App API",
+    "created": "2022-06-15T21:18:04.364Z",
+    "sortNum": 20000,
+    "folders": []
+  }
+]
