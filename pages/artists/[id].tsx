@@ -44,13 +44,13 @@ const ArtistPage = ({id}: Props): ReactElement => {
                         <ul>
                             {artist.albums.map((album: Album) => (
                                 <li key={album.id}>
-                                    <p>{album.name}</p>
                                     <Image
                                         alt={`${album.name} artwork`}
                                         height={100}
                                         src={album.artworkUrl}
                                         width={100}
                                     />
+                                    <p>{album.name}</p>
                                 </li>
                             ))}
                         </ul>

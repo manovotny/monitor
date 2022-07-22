@@ -4,11 +4,11 @@
     "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
     "containerId": "",
     "name": "/search (movie)",
-    "url": "https://itunes.apple.com/search?media=movie&entity=movie&attribute=movieTerm&limit=25&term=twilight",
+    "url": "https://itunes.apple.com/search?media=movie&entity=movie&attribute=movieTerm&limit=25&term=twilight&wrapperType=collection",
     "method": "GET",
     "sortNum": 10000,
     "created": "2022-06-09T18:19:04.872Z",
-    "modified": "2022-06-17T18:27:20.797Z",
+    "modified": "2022-07-13T21:54:57.351Z",
     "headers": [],
     "params": [
       {
@@ -35,6 +35,11 @@
         "name": "term",
         "value": "twilight",
         "isPath": false
+      },
+      {
+        "name": "wrapperType",
+        "value": "collection",
+        "isPath": false
       }
     ],
     "tests": []
@@ -57,22 +62,22 @@
     "_id": "d7ab9504-899a-43a0-b554-881108a30bdd",
     "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
     "containerId": "",
-    "name": "/lookup",
-    "url": "https://itunes.apple.com/lookup?id=472949623&entity=album",
+    "name": "/lookup (movie bundle)",
+    "url": "https://itunes.apple.com/lookup?id=362138443&entity=movie",
     "method": "GET",
-    "sortNum": 20000,
+    "sortNum": 12500,
     "created": "2022-06-16T04:11:18.177Z",
-    "modified": "2022-07-08T21:20:23.047Z",
+    "modified": "2022-07-21T02:01:44.199Z",
     "headers": [],
     "params": [
       {
         "name": "id",
-        "value": "472949623",
+        "value": "362138443",
         "isPath": false
       },
       {
         "name": "entity",
-        "value": "album",
+        "value": "movie",
         "isPath": false
       }
     ],
@@ -127,6 +132,56 @@
       {
         "name": "term",
         "value": "jack",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "31bfc25c-c491-4aba-93a7-9b5b82a5ae9a",
+    "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+    "containerId": "",
+    "name": "/lookup (music)",
+    "url": "https://itunes.apple.com/lookup?id=472949623&entity=album",
+    "method": "GET",
+    "sortNum": 17500,
+    "created": "2022-07-13T21:51:38.991Z",
+    "modified": "2022-07-13T21:55:41.521Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "id",
+        "value": "472949623",
+        "isPath": false
+      },
+      {
+        "name": "entity",
+        "value": "album",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "003e11c2-b2e9-413d-a692-eee56c645718",
+    "colId": "95373e8b-ec02-4b4f-ae11-b3e7a04d1cb9",
+    "containerId": "",
+    "name": "/lookup (movie)",
+    "url": "https://itunes.apple.com/lookup?id=1437260890&entity=movie",
+    "method": "GET",
+    "sortNum": 13750,
+    "created": "2022-07-13T22:09:40.146Z",
+    "modified": "2022-07-13T22:10:32.687Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "id",
+        "value": "1437260890",
+        "isPath": false
+      },
+      {
+        "name": "entity",
+        "value": "movie",
         "isPath": false
       }
     ],

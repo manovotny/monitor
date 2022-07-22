@@ -28,9 +28,48 @@ type ItunesArtist = {
     artistType: string;
 };
 
+type Movie = {
+    artworkUrl: string;
+    bundle: boolean;
+    description?: string;
+    duration?: string;
+    id: number;
+    name: string;
+    price: number;
+    rating: string;
+    releaseDate: Date;
+    url: string;
+};
+
+type ItunesMovie = {
+    artworkUrl100: string;
+    collectionId?: number;
+    collectionName?: string;
+    collectionHdPrice?: number;
+    collectionViewUrl?: string;
+    contentAdvisoryRating: string;
+    longDescription: string;
+    releaseDate: Date;
+    trackId: number;
+    trackName: string;
+    trackHdPrice: number;
+    trackTimeMillis: number;
+    trackViewUrl: string;
+};
+
+type ItunesMovieBundle = {
+    artworkUrl100: string;
+    collectionId: number;
+    collectionName: string;
+    collectionHdPrice: number;
+    collectionViewUrl: string;
+    contentAdvisoryRating: string;
+    releaseDate: Date;
+};
+
 type User = {
     id: number;
     name: string;
 };
 
-export type {Album, Artist, ItunesAlbum, ItunesArtist, User};
+export type {Album, Artist, ItunesAlbum, ItunesArtist, ItunesMovie, ItunesMovieBundle, Movie, User};
