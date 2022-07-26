@@ -8,9 +8,9 @@ import {useRouter} from 'next/router';
 import Image from 'next/image';
 import type {GetServerSideProps} from 'next';
 
-import Layout from '../components/Layout';
-import type {Movie} from '../types';
-import fetcher from '../lib/fetcher';
+import Layout from '../../components/Layout';
+import type {Movie} from '../../types';
+import fetcher from '../../lib/fetcher';
 
 type ApiResults = {
     movies?: Movie[];
