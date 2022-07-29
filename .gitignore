@@ -1,5 +1,6 @@
 *.log
 **/tsconfig.tsbuildinfo
+.data
 .DS_Store
 node_modules
 .next
