@@ -2,6 +2,7 @@
     "name": "monitor",
     "version": "0.0.0",
     "private": true,
+    "sideEffects": false,
     "scripts": {
         "build": "next build",
         "check": "npm-check -u",
@@ -21,9 +22,15 @@
         "*": "prettier --write --ignore-unknown"
     },
     "dependencies": {
+        "@fast-csv/format": "4.3.5",
+        "cheerio": "1.0.0-rc.12",
+        "dotenv": "16.0.1",
         "event-stream": "4.0.1",
+        "got": "12.3.0",
+        "listr2": "5.0.1",
         "ms": "2.1.3",
         "next": "12.2.1",
+        "node-unar": "1.0.8",
         "query-string": "7.1.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
