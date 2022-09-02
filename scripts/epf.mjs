@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import {parse} from 'node:path';
+import process from 'node:process';
 import stream from 'node:stream/promises';
 
 import es from 'event-stream';
@@ -12,16 +13,79 @@ import * as dotenv from 'dotenv';
 
 const {mkdir, rename, rm} = fs.promises;
 const rf = {recursive: true, force: true};
-const props = {};
-const headers = [];
-const types = [];
-const rows = [];
 
-const MOVIE_TYPE_ID = '6';
-let lineNumber = 0;
-let mediaTypeIdIndex;
+const FIELD_SEPARATOR = /\u0001/;
+const RECORD_SEPARATOR = /\u0002/;
+const MEDIA_TYPE_MOVIE = '6';
+const COLLECTION_TYPE_MOVIE_BUNDLE = '8';
 
 dotenv.config();
+
+const asdf = ({input, output}) => {
+    const props = {};
+    const headers = [];
+    const types = [];
+    const rows = [];
+
+    let lineNumber = 0;
+    let mediaTypeIdIndex;
+    let collectionTypeIdIndex;
+
+    return new Promise((resolve, reject) => {
+        const stream = fs.createReadStream(input);
+
+        stream.on('end', () => {
+            writeToPath(output, rows, {
+                headers,
+                quoteColumns: true,
+            })
+                .on('error', (err) => console.error(err))
+                .on('finish', () => resolve());
+        });
+        stream.on('error', (error) => reject(error));
+
+        stream.pipe(es.split(RECORD_SEPARATOR)).pipe(
+            es.mapSync((raw) => {
+                lineNumber++;
+
+                if (!raw.length) {
+                    return;
+                }
+
+                const line = raw.replace(/\r?\n|\r/, ' ').trim();
+
+                if (line.startsWith('#')) {
+                    const uncommented = line.slice(1);
+
+                    if (uncommented.startsWith('#legal')) {
+                        return;
+                    } else if (lineNumber === 1) {
+                        headers.push(...uncommented.split(FIELD_SEPARATOR));
+                        mediaTypeIdIndex = headers.indexOf('media_type_id');
+                        collectionTypeIdIndex = headers.indexOf('collection_type_id');
+                    } else {
+                        const [key, value] = uncommented.split(':');
+
+                        if (key === 'dbTypes') {
+                            types.push(...value.split(FIELD_SEPARATOR));
+                        } else {
+                            props[key] = value;
+                        }
+                    }
+                }
+
+                const row = line.replace(RECORD_SEPARATOR, '').split(FIELD_SEPARATOR);
+
+                if (
+                    row[mediaTypeIdIndex] === MEDIA_TYPE_MOVIE &&
+                    (collectionTypeIdIndex === -1 || row[collectionTypeIdIndex] === COLLECTION_TYPE_MOVIE_BUNDLE)
+                ) {
+                    rows.push(row);
+                }
+            })
+        );
+    });
+};
 
 const tasks = new Listr([
     {
@@ -37,13 +101,14 @@ const tasks = new Listr([
         },
     },
     {
-        title: 'Cleaning previous up downloads',
+        title: 'Cleaning up data processing',
         task: async () => {
-            await rm('.data', {recursive: true, force: true});
+            await rm('.data', rf);
             await mkdir('.data', {recursive: true});
         },
     },
     {
+        skip: true,
         title: 'Downloading Enterprise Partner Feed from Apple',
         task: async (ctx, task) => {
             const baseUrl = 'https://feeds.itunes.apple.com/feeds/epf/v5/current/';
@@ -66,6 +131,7 @@ const tasks = new Listr([
         },
     },
     {
+        skip: true,
         title: 'Extracting tar files',
         task: async (ctx, task) => {
             await unpack('.data/video.tbz', {
@@ -87,57 +153,12 @@ const tasks = new Listr([
         },
     },
     {
-        title: 'Creating CSV files',
+        // skip: true,
+        title: 'Creating video CSV file',
         task: (ctx, task) =>
-            new Promise((resolve, reject) => {
-                const stream = fs.createReadStream(`.data/video`);
-
-                stream.on('end', () => {
-                    writeToPath('.data/video.csv', rows, {
-                        headers,
-                        quoteColumns: true,
-                    })
-                        .on('error', (err) => console.error(err))
-                        .on('finish', () => resolve());
-                });
-                stream.on('error', (error) => reject(error));
-
-                stream.pipe(es.split(/\u0002/)).pipe(
-                    es.mapSync((raw) => {
-                        lineNumber++;
-
-                        if (!raw.length) {
-                            return;
-                        }
-
-                        const line = raw.replace(/\r?\n|\r/, ' ').trim();
-
-                        if (line.startsWith('#')) {
-                            const uncommented = line.slice(1);
-
-                            if (uncommented.startsWith('#legal')) {
-                                return;
-                            } else if (lineNumber === 1) {
-                                headers.push(...uncommented.split(/\u0001/));
-                                mediaTypeIdIndex = headers.indexOf('media_type_id');
-                            } else {
-                                const [key, value] = uncommented.split(':');
-
-                                if (key === 'dbTypes') {
-                                    types.push(...value.split(/\u0001/));
-                                } else {
-                                    props[key] = value;
-                                }
-                            }
-                        }
-
-                        const row = line.replace(/\u0002/, '').split(/\u0001/);
-
-                        if (row[mediaTypeIdIndex] === MOVIE_TYPE_ID) {
-                            rows.push(row);
-                        }
-                    })
-                );
+            asdf({
+                input: '.epf/video',
+                output: '.data/video.csv',
             }),
     },
 ]);
@@ -148,11 +169,6 @@ try {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
 
     console.log('memory', `${Math.round(used * 100) / 100} MB`);
-    console.log('props', props);
-    console.log('headers', headers);
-    console.log('types', types);
-    console.log('lines', lineNumber.toLocaleString('en-US'));
-    console.log('rows', rows.length.toLocaleString('en-US'));
 } catch (error) {
     console.error(error);
 }
