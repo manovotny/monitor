@@ -2,6 +2,7 @@
 **/tsconfig.tsbuildinfo
 .data
 .env
+.epf
 .DS_Store
 .next
 node_modules
