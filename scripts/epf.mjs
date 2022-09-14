@@ -21,17 +21,16 @@ const COLLECTION_TYPE_MOVIE_BUNDLE = '8';
 
 dotenv.config();
 
-const asdf = ({input, output}) => {
-    const props = {};
-    const headers = [];
-    const types = [];
-    const rows = [];
+const asdf = ({input, output, checkMovieTypes}) =>
+    new Promise((resolve, reject) => {
+        const props = {};
+        const headers = [];
+        const databaseTypes = [];
+        const rows = [];
 
-    let lineNumber = 0;
-    let mediaTypeIdIndex;
-    let collectionTypeIdIndex;
-
-    return new Promise((resolve, reject) => {
+        let lineNumber = 0;
+        let mediaTypeIdIndex;
+        let collectionTypeIdIndex;
         const stream = fs.createReadStream(input);
 
         stream.on('end', () => {
@@ -48,11 +47,11 @@ const asdf = ({input, output}) => {
             es.mapSync((raw) => {
                 lineNumber++;
 
-                if (!raw.length) {
+                const line = raw?.replace(/\r?\n|\r/, ' ').trim();
+
+                if (line === undefined || !line.length) {
                     return;
                 }
-
-                const line = raw.replace(/\r?\n|\r/, ' ').trim();
 
                 if (line.startsWith('#')) {
                     const uncommented = line.slice(1);
@@ -67,25 +66,27 @@ const asdf = ({input, output}) => {
                         const [key, value] = uncommented.split(':');
 
                         if (key === 'dbTypes') {
-                            types.push(...value.split(FIELD_SEPARATOR));
+                            databaseTypes.push(...value.split(FIELD_SEPARATOR));
                         } else {
                             props[key] = value;
                         }
                     }
+
+                    return;
                 }
 
-                const row = line.replace(RECORD_SEPARATOR, '').split(FIELD_SEPARATOR);
+                const row = line.split(FIELD_SEPARATOR);
 
                 if (
-                    row[mediaTypeIdIndex] === MEDIA_TYPE_MOVIE &&
-                    (collectionTypeIdIndex === -1 || row[collectionTypeIdIndex] === COLLECTION_TYPE_MOVIE_BUNDLE)
+                    !checkMovieTypes ||
+                    ((mediaTypeIdIndex === -1 || row[mediaTypeIdIndex] === MEDIA_TYPE_MOVIE) &&
+                        (collectionTypeIdIndex === -1 || row[collectionTypeIdIndex] === COLLECTION_TYPE_MOVIE_BUNDLE))
                 ) {
                     rows.push(row);
                 }
             })
         );
     });
-};
 
 const tasks = new Listr([
     {
@@ -153,13 +154,58 @@ const tasks = new Listr([
         },
     },
     {
-        // skip: true,
-        title: 'Creating video CSV file',
+        title: 'Creating CSV files',
         task: (ctx, task) =>
-            asdf({
-                input: '.epf/video',
-                output: '.data/video.csv',
-            }),
+            task.newListr([
+                {
+                    title: 'collection',
+                    task: (ctx, task) =>
+                        asdf({
+                            input: '.epf/collection',
+                            output: '.data/collection.csv',
+                        }),
+                },
+                {
+                    title: 'collection_type',
+                    task: (ctx, task) =>
+                        asdf({
+                            input: '.epf/collection_type',
+                            output: '.data/collection_type.csv',
+                        }),
+                },
+                {
+                    title: 'collection_video',
+                    task: (ctx, task) =>
+                        asdf({
+                            input: '.epf/collection_video',
+                            output: '.data/collection_video.csv',
+                        }),
+                },
+                {
+                    title: 'media_type',
+                    task: (ctx, task) =>
+                        asdf({
+                            input: '.epf/media_type',
+                            output: '.data/media_type.csv',
+                        }),
+                },
+                {
+                    title: 'storefront',
+                    task: (ctx, task) =>
+                        asdf({
+                            input: '.epf/storefront',
+                            output: '.data/storefront.csv',
+                        }),
+                },
+                // {
+                //     title: 'video',
+                //     task: (ctx, task) =>
+                //         asdf({
+                //             input: '.epf/video',
+                //             output: '.data/video.csv',
+                //         }),
+                // },
+            ]),
     },
 ]);
 
