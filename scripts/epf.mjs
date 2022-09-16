@@ -8,7 +8,6 @@ import got from 'got';
 import {load} from 'cheerio';
 import {unpack} from 'node-unar';
 import {Listr} from 'listr2';
-import {writeToPath} from '@fast-csv/format';
 import * as dotenv from 'dotenv';
 
 const {mkdir, rename, rm} = fs.promises;
@@ -24,26 +23,20 @@ dotenv.config();
 const asdf = ({input, output, checkMovieTypes}) =>
     new Promise((resolve, reject) => {
         const props = {};
-        const headers = [];
         const databaseTypes = [];
-        const rows = [];
 
         let lineNumber = 0;
         let mediaTypeIdIndex;
         let collectionTypeIdIndex;
-        const stream = fs.createReadStream(input);
+        const readStream = fs.createReadStream(input);
+        const writeStream = fs.createWriteStream(output);
 
-        stream.on('end', () => {
-            writeToPath(output, rows, {
-                headers,
-                quoteColumns: true,
-            })
-                .on('error', (err) => console.error(err))
-                .on('finish', () => resolve());
-        });
-        stream.on('error', (error) => reject(error));
+        writeStream.on('finish', () => resolve());
+        writeStream.on('error', (error) => reject(error));
 
-        stream.pipe(es.split(RECORD_SEPARATOR)).pipe(
+        readStream.on('end', () => writeStream.end());
+        readStream.on('error', (error) => reject(error));
+        readStream.pipe(es.split(RECORD_SEPARATOR)).pipe(
             es.mapSync((raw) => {
                 lineNumber++;
 
@@ -59,9 +52,12 @@ const asdf = ({input, output, checkMovieTypes}) =>
                     if (uncommented.startsWith('#legal')) {
                         return;
                     } else if (lineNumber === 1) {
-                        headers.push(...uncommented.split(FIELD_SEPARATOR));
+                        const headers = uncommented.split(FIELD_SEPARATOR);
+
                         mediaTypeIdIndex = headers.indexOf('media_type_id');
                         collectionTypeIdIndex = headers.indexOf('collection_type_id');
+
+                        writeStream.write(`"${headers.join('","')}"\n`);
                     } else {
                         const [key, value] = uncommented.split(':');
 
@@ -77,12 +73,17 @@ const asdf = ({input, output, checkMovieTypes}) =>
 
                 const row = line.split(FIELD_SEPARATOR);
 
+                if (checkMovieTypes && (row[1] === '710076112' || row[1] === '1590580613' || row[1] === '1266863842')) {
+                    console.log('row', row);
+                    process.exit(0);
+                }
+
                 if (
                     !checkMovieTypes ||
                     ((mediaTypeIdIndex === -1 || row[mediaTypeIdIndex] === MEDIA_TYPE_MOVIE) &&
                         (collectionTypeIdIndex === -1 || row[collectionTypeIdIndex] === COLLECTION_TYPE_MOVIE_BUNDLE))
                 ) {
-                    rows.push(row);
+                    writeStream.write(`"${row.map((field) => field.replaceAll('"', '""')).join('","')}"\n`);
                 }
             })
         );
@@ -132,6 +133,7 @@ const tasks = new Listr([
         },
     },
     {
+        // `tar -xvf FILENAME` works on unix.
         skip: true,
         title: 'Extracting tar files',
         task: async (ctx, task) => {
@@ -161,6 +163,7 @@ const tasks = new Listr([
                     title: 'collection',
                     task: (ctx, task) =>
                         asdf({
+                            checkMovieTypes: true,
                             input: '.epf/collection',
                             output: '.data/collection.csv',
                         }),
@@ -197,14 +200,14 @@ const tasks = new Listr([
                             output: '.data/storefront.csv',
                         }),
                 },
-                // {
-                //     title: 'video',
-                //     task: (ctx, task) =>
-                //         asdf({
-                //             input: '.epf/video',
-                //             output: '.data/video.csv',
-                //         }),
-                // },
+                {
+                    title: 'video',
+                    task: (ctx, task) =>
+                        asdf({
+                            input: '.epf/video',
+                            output: '.data/video.csv',
+                        }),
+                },
             ]),
     },
 ]);

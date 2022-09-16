@@ -22,7 +22,6 @@
         "*": "prettier --write --ignore-unknown"
     },
     "dependencies": {
-        "@fast-csv/format": "4.3.5",
         "cheerio": "1.0.0-rc.12",
         "dotenv": "16.0.1",
         "event-stream": "4.0.1",
