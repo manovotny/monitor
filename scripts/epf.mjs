@@ -163,7 +163,7 @@ const tasks = new Listr([
                     title: 'collection',
                     task: (ctx, task) =>
                         asdf({
-                            checkMovieTypes: true,
+                            // checkMovieTypes: true,
                             input: '.epf/collection',
                             output: '.data/collection.csv',
                         }),
@@ -200,14 +200,14 @@ const tasks = new Listr([
                             output: '.data/storefront.csv',
                         }),
                 },
-                {
-                    title: 'video',
-                    task: (ctx, task) =>
-                        asdf({
-                            input: '.epf/video',
-                            output: '.data/video.csv',
-                        }),
-                },
+                // {
+                //     title: 'video',
+                //     task: (ctx, task) =>
+                //         asdf({
+                //             input: '.epf/video',
+                //             output: '.data/video.csv',
+                //         }),
+                // },
             ]),
     },
 ]);
