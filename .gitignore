@@ -1,6 +1,8 @@
 *.log
 **/tsconfig.tsbuildinfo
 .data
+.env
+.epf
 .DS_Store
-node_modules
 .next
+node_modules
